@@ -16,6 +16,6 @@ steps:
   inputs:
     pythonUploadServiceConnection: PYPIanywhere
 
-- script: twine upload dist/*
+- script: twine upload -r "PYPIanywhere" --config-file $(PYPIRC_PATH) dist/*
   continueOnError: false
   displayName: 'Twine Upload'

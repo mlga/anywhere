@@ -30,9 +30,10 @@ class PylintCommand(distutils.cmd.Command):
         """Run command."""
         command = [
             'pylint', '--rcfile=toolscfg/pylintrc',
-            # Those two are only cluttering the results, will be fixed some day.
+            # Those three are only cluttering the results, will be fixed some day.
             '--disable', 'missing-module-docstring',
             '--disable', 'missing-function-docstring',
+            '--disable', 'missing-class-docstring',
             'anywhere',
         ]
 

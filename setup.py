@@ -28,7 +28,13 @@ class PylintCommand(distutils.cmd.Command):
 
     def run(self):
         """Run command."""
-        command = ['pylint', '--rcfile=toolscfg/pylintrc', 'anywhere']
+        command = [
+            'pylint', '--rcfile=toolscfg/pylintrc',
+            # Those two are only cluttering the results, will be fixed some day.
+            '--disable', 'missing-module-docstring',
+            '--disable', 'missing-function-docstring',
+            'anywhere',
+        ]
 
         self.announce(f'Running command: {" ".join(command)}', level=distutils.log.INFO)
 
@@ -61,6 +67,33 @@ class CleanCommand(distutils.cmd.Command):
             ['rm', '-f', 'report.xml'],
             ['rm', '-Rf', 'build'],
             ['rm', '-Rf', 'dist'],
+        )
+
+        for command in commands:
+            self.announce(f'Running command: {" ".join(command)}', level=distutils.log.INFO)
+            try:
+                subprocess.check_call(command)
+            except subprocess.CalledProcessError as ex:
+                sys.exit(ex.returncode)
+
+
+class ProtocCommand(distutils.cmd.Command):
+    """A custom command to clean build / test artifacts."""
+
+    description = 'Clean artifacts (reports, builds...).'
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        """Run command."""
+        commands = (
+            ['protoc', '-I', '.', '--python_out', '.', 'anywhere/anywhere.proto'],
+            ['mv', 'anywhere/anywhere_pb2.py', 'anywhere/protobuf3/'],
         )
 
         for command in commands:
@@ -105,6 +138,9 @@ setup(
         ],
         'develop': [
             'pylint~=2.3',
+            'pytest~=5.0',
+            'pytest-cov~=2.7',
+            'pytest-html~=1.20',
         ],
     },
     packages=find_packages(exclude=['tests']),
@@ -114,6 +150,7 @@ setup(
     cmdclass={
         'pylint': PylintCommand,
         'clean': CleanCommand,
+        'protoc': ProtocCommand,
     },
     python_requires='>=3.7',
 )

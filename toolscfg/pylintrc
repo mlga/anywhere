@@ -11,7 +11,7 @@ ignore=CVS
 
 # Add files or directories matching the regex patterns to the blacklist. The
 # regex matches against base names, not paths.
-ignore-patterns=where_pb2.py
+ignore-patterns=anywhere_pb2.py
 
 # Python code to execute, usually for sys.path manipulation such as
 # pygtk.require().
@@ -139,7 +139,8 @@ disable=print-statement,
         deprecated-sys-function,
         exception-escape,
         comprehension-escape,
-        empty-docstring
+        empty-docstring,
+        duplicate-code
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option

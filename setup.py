@@ -105,33 +105,6 @@ class ProtocCommand(distutils.cmd.Command):
                 sys.exit(ex.returncode)
 
 
-class IsReleaseCommand(distutils.cmd.Command):
-    """A custom command to check if current version should be released to pypi."""
-
-    description = 'Check if version should be released.'
-    user_options = []
-
-    def initialize_options(self):
-        pass
-
-    def finalize_options(self):
-        pass
-
-    def run(self):
-        """Run command."""
-        import re
-        from setuptools_scm import get_version
-
-        version = get_version()
-        result = re.match(r'^\d+.\d+.\d+(-rc.\d)?$', version)
-
-        self.announce(version, level=distutils.log.INFO)
-        if result:
-            self.announce('YES', level=distutils.log.INFO)
-        else:
-            self.announce('NO', level=distutils.log.INFO)
-
-
 setup(
     name='anywhere',
     use_scm_version=True,
@@ -179,7 +152,6 @@ setup(
         'pylint': PylintCommand,
         'clean': CleanCommand,
         'protoc': ProtocCommand,
-        'isrelease': IsReleaseCommand,
     },
     python_requires='>=3.7',
 )
